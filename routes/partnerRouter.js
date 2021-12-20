@@ -42,7 +42,7 @@ partnersRouter
   })
   .put((req, res) => {
     res.end(
-      `updating partner with id ${req.body.name} and description as ${req.body.description} for id ${req.params.partnerId}`
+      `updating partner: ${req.params.partnerId} Will update the partner: ${req.body.name} with description: ${req.body.description}`
     );
   })
   .delete((req, res) => {
