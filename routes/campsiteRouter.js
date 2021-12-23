@@ -8,7 +8,7 @@ campsiteRouter
   .get((req, res, next) => {
     Campsite.find()
       .then((campsites) => {
-        require.statusCode = 200;
+        res.statusCode = 200;
         res.setHeader("Content-Type", "application/json");
         res.json(campsites);
       })
@@ -33,33 +33,51 @@ campsiteRouter
       .then((response) => {
         res.statusCode = 200;
         res.setHeader("Content-Type", "application/json");
+        res.json(response);
       })
       .catch((err) => next(err));
   });
 
 campsiteRouter
   .route("/:campsiteId")
-  .all((req, res, next) => {
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "text/plain");
-    next();
-  })
-  .get((req, res) => {
-    res.end(`Sending campsite with id of ${req.params.campsiteId}`);
+  .get((req, res, next) => {
+    Campsite.findById(req.params.campsiteId)
+      .then((campsite) => {
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json(campsite);
+      })
+      .catch((err) => next(err));
   })
   .post((req, res) => {
     res.statusCode = 403;
     res.end(
-      `This operation for adding campsite with id ${req.params.campsiteId} is not supported`
+      `POST operation not supported on /campsites/${req.params.campsiteId}`
     );
   })
-  .put((req, res) => {
-    res.end(
-      `updating campsite with id ${req.body.name} and description as ${req.body.description} for id ${req.params.campsiteId}`
-    );
+  .put((req, res, next) => {
+    Campsite.findByIdAndUpdate(
+      req.params.campsiteId,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    )
+      .then((campsite) => {
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json(campsite);
+      })
+      .catch((err) => next(err));
   })
-  .delete((req, res) => {
-    res.end(`Deleting campsite with id ${req.params.campsiteId}`);
+  .delete((req, res, next) => {
+    Campsite.findByIdAndDelete(req.params.campsiteId)
+      .then((response) => {
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json(response);
+      })
+      .catch((err) => next(err));
   });
 
 module.exports = campsiteRouter;
