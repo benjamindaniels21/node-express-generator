@@ -9,7 +9,6 @@ const promotionSchema = new Schema(
     name: {
       type: String,
       required: true,
-      unique: true,
     },
     image: {
       type: String,
@@ -18,7 +17,6 @@ const promotionSchema = new Schema(
     featured: {
       type: Boolean,
       default: false,
-      unique: true,
     },
     cost: {
       type: Currency,
@@ -37,4 +35,4 @@ const promotionSchema = new Schema(
 
 const Promotion = mongoose.model("Promotion", promotionSchema);
 
-module.exports = Campsite;
+module.exports = Promotion;

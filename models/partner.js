@@ -6,7 +6,6 @@ const partnerSchema = new Schema(
     name: {
       type: String,
       required: true,
-      unique: true,
     },
     image: {
       type: String,
@@ -15,7 +14,6 @@ const partnerSchema = new Schema(
     featured: {
       type: Boolean,
       default: false,
-      unique: true,
     },
     description: {
       type: String,
@@ -26,8 +24,6 @@ const partnerSchema = new Schema(
     timestamps: true,
   }
 );
-
-//still need createdAt and updatedAt
 
 const Partner = mongoose.model("Partner", partnerSchema);
 
