@@ -7,9 +7,14 @@ const jwt = require("jsonwebtoken");
 
 const config = require("./config");
 
+//strategy for authenticating a user and their password
 exports.local = passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+
+//takes an argument of a callback which will check to see if the strategies
+//are implemented correctly
+//Note: your login route won't work without these lines of code.
+passport.serializeUser(User.serializeUser()); //checks if true
+passport.deserializeUser(User.deserializeUser()); //error handler
 
 exports.getToken = (user) => {
   return jwt.sign(user, config.secretKey, { expiresIn: 3600 });
@@ -37,4 +42,12 @@ exports.jwtPassport = passport.use(
 exports.verifyUser = passport.authenticate("jwt", { session: false });
 
 //admin check goes here
-// exports.verifyAdmin = ()
+exports.verifyAdmin = (req, res, next) => {
+  if (req.user.admin) {
+    return next();
+  } else {
+    const err = new Error("You are authorized to perform this operation");
+    err.status = 403;
+    return next(err);
+  }
+};
