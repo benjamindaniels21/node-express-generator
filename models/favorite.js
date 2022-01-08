@@ -8,7 +8,7 @@ const favoriteSchema = new Schema({
   },
   campsites: [
     {
-      type: mongoose.Schema.Types.ObjectId, //put in array
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Campsite",
     },
   ],
